@@ -7,14 +7,12 @@ import requests
 import schedule
 import time
 URL = "http://localhost:8080/api/getMessage?type=2"
-
+slogin = ""
 def chat_to_user():
     print('Chat 1p')
-    slogin = Skype("sanvankhanh@gmail.com", "Vui@23102000");
     contact = slogin.contacts['live:.cid.44d685e75e2477a5'];
     contact.chat.sendMsg('Em test gửi tin nhắn 1p 1 lần nha')
 def chat_to_sky(msg):
-    slogin = Skype("sanvankhanh@gmail.com", "Vui@23102000");
     channel = slogin.chats.chat('19:6cfc52db634148c49c1929ad0de36681@thread.skype') #Gửi tn chốt cơm
     channel.sendMsg(msg)
     skc = SkypeChats(slogin)
@@ -26,16 +24,18 @@ def run():
     # Use a breakpoint in the code line below to debug your script.
     r = requests.get(url=URL)
     r = r.json();
-    print(r['message'])
+    print(r['message']);
+    chat_to_user();
 #    chat_to_sky(msg=r['message'])
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    slogin = Skype("sanvankhanh@gmail.com", "Vui@23102000");
     run();
 
 schedule.every().day.at("20:51").do(run)
-schedule.every(1).minutes.do(chat_to_user)
+schedule.every(5).seconds.do(chat_to_user)
 
 while True:
     # Checks whether a scheduled task
