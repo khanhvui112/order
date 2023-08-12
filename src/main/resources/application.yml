@@ -17,7 +17,7 @@ spring:
     template-loader-path: classpath:/templates
     suffix: .ftl
   datasource:
-    url: jdbc:mysql://localhost:3306/books
+    url: jdbc:mysql://localhost:3306/orders
     username: root
     password: Vui@23102000
     driver-class-name: com.mysql.cj.jdbc.Driver
