@@ -19,7 +19,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/books
     username: root
-    password:
+    password: Vui@23102000
     driver-class-name: com.mysql.cj.jdbc.Driver
     maximum-pool-size: 20
     hikari:
