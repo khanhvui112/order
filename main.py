@@ -7,17 +7,17 @@ import requests
 import schedule
 import time
 URL = "http://localhost:8080/api/getMessage?type=2"
-slogin = ""
+slogin = Skype("sanvankhanh@gmail.com", "Vui@23102000")
 def chat_to_user():
     print('Chat 1p')
-    contact = slogin.contacts['live:.cid.44d685e75e2477a5'];
+    contact = slogin.contacts['live:.cid.44d685e75e2477a5']
     contact.chat.sendMsg('Em test gửi tin nhắn 1p 1 lần nha')
 def chat_to_sky(msg):
     channel = slogin.chats.chat('19:6cfc52db634148c49c1929ad0de36681@thread.skype') #Gửi tn chốt cơm
     channel.sendMsg(msg)
     skc = SkypeChats(slogin)
     print(skc.recent())
-    contact = slogin.contacts['live:.cid.44d685e75e2477a5'];
+    contact = slogin.contacts['live:.cid.44d685e75e2477a5']
     # for i in range(1, 11):
     #     contact.chat.sendMsg('Test send message '+str(i))
 def run():
@@ -31,7 +31,6 @@ def run():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    slogin = Skype("sanvankhanh@gmail.com", "Vui@23102000");
     run();
 
 schedule.every().day.at("20:51").do(run)
