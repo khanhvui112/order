@@ -41,7 +41,7 @@ if __name__ == '__main__':
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
 
-schedule.every().day.at("14:00").do(run)
+schedule.every().day.at("14:04").do(run)
 schedule.every(5).seconds.do(chat_to_user)
 
 while True:
