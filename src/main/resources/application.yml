@@ -17,9 +17,9 @@ spring:
     template-loader-path: classpath:/templates
     suffix: .ftl
   datasource:
-    url: jdbc:mysql://localhost:3306/orders
-    username: root
-    password: Vui@23102000
+    url: jdbc:mysql://13.211.58.3:3306/orders
+    username: orders
+    password: 23102000
     driver-class-name: com.mysql.cj.jdbc.Driver
     maximum-pool-size: 20
     hikari:
