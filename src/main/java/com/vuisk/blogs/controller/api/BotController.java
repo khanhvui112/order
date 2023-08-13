@@ -5,20 +5,13 @@ import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
 import com.vuisk.blogs.model.entities.Orders;
 import com.vuisk.blogs.service.impl.OrdersServiceImpl;
-import fr.delthas.skype.Skype;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @RestController

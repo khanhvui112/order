@@ -62,7 +62,7 @@ public class OrdersController {
 //                out.setCreateTime(o.getCreateTime()+"");
                 Timestamp stamp = new Timestamp(o.getCreateTime());
                 Date date = new Date(stamp.getTime());
-                DateFormat f = new SimpleDateFormat("hh:mm yyyy-MM-dd");
+                DateFormat f = new SimpleDateFormat("HH:MM yyyy-MM-dd");
                 String d = f.format(date);
                 out.setCreateTime(d);
                 out.setQuantity(o.getQuantity());
