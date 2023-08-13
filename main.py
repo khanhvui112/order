@@ -11,8 +11,9 @@ slogin = ""
 def chat_to_user():
     print('Chat 1p')
     contact = slogin.contacts['live:.cid.44d685e75e2477a5'];
-    contact.chat.sendMsg('Em test gửi tin nhắn 1p 1 lần nha')
+    contact.chat.sendMsg('Server test 5s')
 def chat_to_sky(msg):
+    print('Gửi tin nhắn vô nhóm skype')
     channel = slogin.chats.chat('19:6cfc52db634148c49c1929ad0de36681@thread.skype') #Gửi tn chốt cơm
     channel.sendMsg(msg)
     skc = SkypeChats(slogin)
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
 
-schedule.every().day.at("20:51").do(run)
+schedule.every().day.at("14:00").do(run)
 schedule.every(5).seconds.do(chat_to_user)
 
 while True:
