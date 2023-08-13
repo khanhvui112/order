@@ -22,7 +22,8 @@ public class HomeController {
     private String user(Model model){
         model.addAttribute("blogs", blogServiceImpl.findAll());
         model.addAttribute("categories", categoryServiceImpl.findAll());
-        return "user/index";
+        return "redirect:/orders";
+//        return "user/index";
     }
     @GetMapping("/admin")
     private String home(){
