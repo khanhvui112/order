@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,12 +60,7 @@ public class OrdersController {
                 }else{
                     out.setPayment(0);
                 }
-//                out.setCreateTime(o.getCreateTime()+"");
-                Timestamp stamp = new Timestamp(o.getCreateTime());
-                Date date = new Date(stamp.getTime());
-                DateFormat f = new SimpleDateFormat("HH:MM yyyy-MM-dd");
-                String d = f.format(date);
-                out.setCreateTime(d);
+                out.setCreateTime(convertTime(o.getCreateTime()));
                 out.setQuantity(o.getQuantity());
                 orders.add(out);
             }
@@ -107,5 +103,11 @@ public class OrdersController {
             return "Order/edit";
         }
         return "redirect:/Orders";
+    }
+
+    public static String convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        return format.format(date);
     }
 }
