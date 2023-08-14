@@ -28,196 +28,12 @@
     <link href="/css/lib/helper.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 
 <body>
-<#--<div class="header">-->
-<#--    <div class="container-fluid">-->
-<#--        <div class="row">-->
-<#--            <div class="col-lg-12">-->
-<#--                <div class="float-left">-->
-<#--                    <div class="hamburger sidebar-toggle is-active">-->
-<#--                        <span class="line"></span>-->
-<#--                        <span class="line"></span>-->
-<#--                        <span class="line"></span>-->
-<#--                    </div>-->
-<#--                </div>-->
-<#--                <div class="float-right">-->
-<#--                    <div class="dropdown dib">-->
-<#--                        <div class="header-icon" data-toggle="dropdown">-->
-<#--                            <i class="ti-bell"></i>-->
-<#--                            <div class="drop-down dropdown-menu dropdown-menu-right">-->
-<#--                                <div class="dropdown-content-heading">-->
-<#--                                    <span class="text-left">Recent Notifications</span>-->
-<#--                                </div>-->
-<#--                                <div class="dropdown-content-body">-->
-<#--                                    <ul>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/3.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Mr. John</div>-->
-<#--                                                    <div class="notification-text">5 members joined today </div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/3.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Mariam</div>-->
-<#--                                                    <div class="notification-text">likes a photo of you</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/3.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Tasnim</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/3.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Mr. John</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li class="text-center">-->
-<#--                                            <a href="#" class="more-link">See All</a>-->
-<#--                                        </li>-->
-<#--                                    </ul>-->
-<#--                                </div>-->
-<#--                            </div>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="dropdown dib">-->
-<#--                        <div class="header-icon" data-toggle="dropdown">-->
-<#--                            <i class="ti-email"></i>-->
-<#--                            <div class="drop-down dropdown-menu dropdown-menu-right">-->
-<#--                                <div class="dropdown-content-heading">-->
-<#--                                    <span class="text-left">2 New Messages</span>-->
-<#--                                    <a href="email.html">-->
-<#--                                        <i class="ti-pencil-alt pull-right"></i>-->
-<#--                                    </a>-->
-<#--                                </div>-->
-<#--                                <div class="dropdown-content-body">-->
-<#--                                    <ul>-->
-<#--                                        <li class="notification-unread">-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/1.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Michael Qin</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li class="notification-unread">-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/2.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Mr. John</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/3.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Michael Qin</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <img class="pull-left m-r-10 avatar-img" src="images/avatar/2.jpg" alt="" />-->
-<#--                                                <div class="notification-content">-->
-<#--                                                    <small class="notification-timestamp pull-right">02:34 PM</small>-->
-<#--                                                    <div class="notification-heading">Mr. John</div>-->
-<#--                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>-->
-<#--                                                </div>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li class="text-center">-->
-<#--                                            <a href="#" class="more-link">See All</a>-->
-<#--                                        </li>-->
-<#--                                    </ul>-->
-<#--                                </div>-->
-<#--                            </div>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="dropdown dib">-->
-<#--                        <div class="header-icon" data-toggle="dropdown">-->
-<#--                                <span class="user-avatar">John-->
-<#--                                    <i class="ti-angle-down f-s-10"></i>-->
-<#--                                </span>-->
-<#--                            <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">-->
-<#--                                <div class="dropdown-content-heading">-->
-<#--                                    <span class="text-left">Upgrade Now</span>-->
-<#--                                    <p class="trial-day">30 Days Trail</p>-->
-<#--                                </div>-->
-<#--                                <div class="dropdown-content-body">-->
-<#--                                    <ul>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <i class="ti-user"></i>-->
-<#--                                                <span>Profile</span>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <i class="ti-email"></i>-->
-<#--                                                <span>Inbox</span>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <i class="ti-settings"></i>-->
-<#--                                                <span>Setting</span>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <i class="ti-lock"></i>-->
-<#--                                                <span>Lock Screen</span>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                        <li>-->
-<#--                                            <a href="#">-->
-<#--                                                <i class="ti-power-off"></i>-->
-<#--                                                <span>Logout</span>-->
-<#--                                            </a>-->
-<#--                                        </li>-->
-<#--                                    </ul>-->
-<#--                                </div>-->
-<#--                            </div>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                </div>-->
-<#--            </div>-->
-<#--        </div>-->
-<#--    </div>-->
-<#--</div>-->
-
-
 <div class="content-wrap">
     <div class="main">
         <div class="container-fluid">
@@ -278,23 +94,32 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Đặt cơm</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form class="insert-order-form">
+                            <form id="modal-form-all" class="insert-order-form">
                                 <div class="form-group">
                                     <label for="name" class="col-form-label">Tên:</label>
                                     <input type="text" class="form-control name" id="name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="menu" class="col-form-label">Món:</label>
-                                    <textarea class="form-control menu" id="menu"></textarea>
+                                    <label for="name" class="col-form-label">Phòng:</label>
+                                    <input type="text" class="form-control department   " id="department">
+                                </div>
+                                <div class="form-group">
+                                    <select id="multiple-checkboxes" multiple="multiple">
+                                        <#list menus as m>
+                                            <#if m.name??>
+                                                <option value="${m.name}">${m.name}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="menu" class="col-form-label">Số lượng:</label>
-                                    <input type="number" class="form-control quantity" id="quantity">
+                                    <input type="number" value="1" class="form-control quantity" id="quantity">
                                 </div>
                                 <div class="form-group">
                                     <label for="note" class="col-form-label">Ghi chú:</label>
@@ -308,10 +133,21 @@
                                         <option value="0">Chưa CK</option>
                                     </select>
                                 </div>
+<#--                                <div class="form-group">-->
+<#--                                    <select id="example-single-selected">-->
+<#--                                        <option value="1">Option 1</option>-->
+<#--                                        <option value="2" selected="selected">Option 2</option>-->
+<#--                                        <!-- Option 3 will be selected in advance ... &ndash;&gt;-->
+<#--                                        <option value="3" selected="selected">Option 3</option>-->
+<#--                                        <option value="4">Option 4</option>-->
+<#--                                        <option value="5">Option 5</option>-->
+<#--                                        <option value="6">Option 6</option>-->
+<#--                                    </select>-->
+<#--                                </div>-->
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"  data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-secondary close-modal"  data-dismiss="modal">Đóng</button>
                             <button type="button" class="btn btn-primary submit-insert">Đặt</button>
                         </div>
                     </div>
@@ -333,6 +169,7 @@
                                         <tr>
                                             <th>STT</th>
                                             <th>Tên</th>
+                                            <th>Phòng</th>
                                             <th>Món</th>
                                             <th>Số lượng</th>
                                             <th>Ghi chú</th>
@@ -350,6 +187,11 @@
                                                     <#assign index = index + 1>
                                                     <#if o.name??>
                                                          <td>${o.name}</td>
+                                                    <#else>
+                                                        <td></td>
+                                                    </#if>
+                                                    <#if o.department??>
+                                                        <td>${o.department}</td>
                                                     <#else>
                                                         <td></td>
                                                     </#if>
@@ -427,6 +269,7 @@
 
 <!-- jquery vendor -->
 <script src="/js/lib/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
 <script src="/js/lib/jquery.nanoscroller.min.js"></script>
 <!-- nano scroller -->
 <script src="/js/lib/menubar/sidebar.js"></script>
@@ -453,8 +296,12 @@
         $.each(lst , function(index, o) {
             if(o.id == id){
                 $('.name').val(o.name);
+                $('.department').val(o.department);
                 $('.name').attr('id-order', o.id);
-                $('.menu').val(o.menu);
+                // $('.menu').val(o.menu);
+                var menus = (o.menu.replaceAll(', ',',')).split(',');
+                $("#multiple-checkboxes").val(menus);
+                $("#multiple-checkboxes").multiselect("refresh");
                 $('.quantity').val(o.quantity);
                 $('.note-order').val(o.note);
                 $(".payment").val(o.payment).change();
@@ -494,6 +341,29 @@
     function openPopup(){
         $('#exampleModal').modal();
     }
+    $(document).ready(function() {
+        $('#multiple-checkboxes').multiselect({
+            nonSelectedText: 'Chọn món',
+            buttonText: function(options, select) {
+                var numberOfOptions = $(this).children('option').length;
+                if (options.length === 0) {
+                    return this.nonSelectedText + '';
+                } else {
+                    var selected = '';
+                    options.each(function() {
+                        var label = ($(this).attr('label') !== undefined) ?
+                            $(this).attr('label') : $(this).html();
+                        selected += label + ', ';
+                    });
+                    return selected.substr(0, selected.length - 2) + '';
+
+                }
+            }
+        });
+        // $('.multiselect-selected-text').text('Chưa chọn món nào');
+        $('.multiselect').removeClass('btn-default');
+        $('.multiselect').addClass('btn-primary');
+    });
 </script>
 <!-- scripit init-->
 <#--    <script src="/js/lib/data-table/datatables.min.js"></script>

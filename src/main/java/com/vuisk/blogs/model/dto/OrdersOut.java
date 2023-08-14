@@ -21,4 +21,6 @@ public class OrdersOut {
     private int payment;
 
     private String createTime;
+
+    private String department;
 }

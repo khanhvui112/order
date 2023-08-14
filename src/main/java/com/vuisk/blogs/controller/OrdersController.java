@@ -4,10 +4,13 @@ import com.google.gson.Gson;
 import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
 import com.vuisk.blogs.model.entities.LogAdmin;
+import com.vuisk.blogs.model.entities.Menu;
 import com.vuisk.blogs.model.entities.Orders;
 import com.vuisk.blogs.service.impl.LogAdminServiceImpl;
+import com.vuisk.blogs.service.impl.MenuServiceImpl;
 import com.vuisk.blogs.service.impl.OrdersServiceImpl;
 import com.vuisk.blogs.utils.HttpUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +35,8 @@ public class OrdersController {
     private OrdersServiceImpl orderService;
     @Autowired
     private LogAdminServiceImpl logAdminService;
+    @Autowired
+    private MenuServiceImpl menuService;
 
     @GetMapping
     public String Orders(@RequestParam(value = "time", required = false, defaultValue = "0") String time, Model model,
@@ -54,6 +59,31 @@ public class OrdersController {
         }
         List<OrdersOut> orders = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
+            List<Orders> ordersDis = new ArrayList<>();
+            List<Integer> idRemove = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Orders o = list.get(i);
+                for (int j = i + 1; j < list.size(); j++) {
+                    Orders o2 = list.get(j);
+                    if (o.getId() != o2.getId() && o.getMenu().equalsIgnoreCase(o2.getMenu())) {
+                        idRemove.add(i);
+                        ordersDis.add(o2);
+                    }
+                }
+            }
+            if (!idRemove.isEmpty()) {
+                list.removeAll(ordersDis);
+                for (Orders o : list) {
+                    for (Orders o2 : ordersDis) {
+                        if (o.getMenu().equalsIgnoreCase(o2.getMenu())) {
+                            o.setQuantity(o.getQuantity()+o2.getQuantity());
+                            o.setNote(o.getNote()+" | "+ o2.getNote());
+                            o.setName(o.getName()+", "+o2.getName());
+                        }
+                    }
+                }
+            }
+            //Check có suất giốngn nhau không
             for (Orders o : list) {
                 OrdersOut out = new OrdersOut();
                 out.setId(o.getId());
@@ -65,13 +95,19 @@ public class OrdersController {
                 } else {
                     out.setPayment(0);
                 }
+                out.setDepartment(o.getDepartment());
                 out.setCreateTime(convertTime(o.getCreateTime()));
                 out.setQuantity(o.getQuantity());
                 orders.add(out);
             }
         }
+        List<Menu> menus = menuService.findAll();
         model.addAttribute("orderJsons", new Gson().toJson(orders));
         model.addAttribute("orders", orders);
+        if (menus == null) {
+            menus = new ArrayList<>();
+        }
+        model.addAttribute("menus", menus);
         return "order";
     }
 
