@@ -343,9 +343,11 @@
 
                                         <tbody>
                                         <#if orders?size != 0 >
+                                            <#assign index = 1>
                                             <#list orders as o>
                                                 <tr>
-                                                    <td>${o.id}</td>
+                                                    <td>${index}</td>
+                                                    <#assign index = index + 1>
                                                     <#if o.name??>
                                                          <td>${o.name}</td>
                                                     <#else>
@@ -382,6 +384,12 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                <#if (index > orders?size)>
+                                                <tr>
+                                                    <td class="text-primary">Tổng</td>
+                                                    <td class="text-danger">${orders?size}</td>
+                                                </tr>
+                                                </#if>
                                             </#list>
                                         </#if>
                                         <#--                                            draw list category    -->

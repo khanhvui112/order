@@ -40,7 +40,6 @@ public class BotController {
             long endTime = cal.getTimeInMillis();
             list = orderService.findByCreate(startTime, endTime);
         }
-        List<OrdersOut> orders = new ArrayList<>();
         String mssg = "";
         if(list != null && !list.isEmpty()){
             for(Orders o : list){
@@ -50,6 +49,7 @@ public class BotController {
                 }
                 mssg += "\n";
             }
+            mssg += "Tổng: "+list.size();
         }
         return new Response(true, mssg,  null);
     }
