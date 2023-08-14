@@ -45,7 +45,7 @@ public class BotController {
         if(list != null && !list.isEmpty()){
             for(Orders o : list){
                 mssg += o.getName()+" "+o.getQuantity()+"s: "+o.getMenu();
-                if(!Strings.isNullOrEmpty(o.getName())){
+                if(!Strings.isNullOrEmpty(o.getNote())){
                     mssg += "("+o.getNote() +")";
                 }
                 mssg += "\n";
