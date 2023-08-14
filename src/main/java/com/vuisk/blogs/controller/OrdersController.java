@@ -1,5 +1,6 @@
 package com.vuisk.blogs.controller;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
@@ -59,31 +60,6 @@ public class OrdersController {
         }
         List<OrdersOut> orders = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
-            List<Orders> ordersDis = new ArrayList<>();
-            List<Integer> idRemove = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                Orders o = list.get(i);
-                for (int j = i + 1; j < list.size(); j++) {
-                    Orders o2 = list.get(j);
-                    if (o.getId() != o2.getId() && o.getMenu().equalsIgnoreCase(o2.getMenu())) {
-                        idRemove.add(i);
-                        ordersDis.add(o2);
-                    }
-                }
-            }
-            if (!idRemove.isEmpty()) {
-                list.removeAll(ordersDis);
-                for (Orders o : list) {
-                    for (Orders o2 : ordersDis) {
-                        if (o.getMenu().equalsIgnoreCase(o2.getMenu())) {
-                            o.setQuantity(o.getQuantity()+o2.getQuantity());
-                            o.setNote(o.getNote()+" | "+ o2.getNote());
-                            o.setName(o.getName()+", "+o2.getName());
-                        }
-                    }
-                }
-            }
-            //Check có suất giốngn nhau không
             for (Orders o : list) {
                 OrdersOut out = new OrdersOut();
                 out.setId(o.getId());

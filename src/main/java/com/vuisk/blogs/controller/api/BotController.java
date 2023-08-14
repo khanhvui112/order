@@ -48,7 +48,7 @@ public class BotController {
                 Orders o = list.get(i);
                 for (int j = i + 1; j < list.size(); j++) {
                     Orders o2 = list.get(j);
-                    if (o.getId() != o2.getId() && o.getMenu().equalsIgnoreCase(o2.getMenu())) {
+                    if(Strings.isNullOrEmpty(o.getNote()) && Strings.isNullOrEmpty(o2.getNote()) || o.getNote().equalsIgnoreCase(o2.getNote())){
                         idRemove.add(i);
                         ordersDis.add(o2);
                     }
@@ -58,9 +58,12 @@ public class BotController {
                 list.removeAll(ordersDis);
                 for (Orders o : list) {
                     for (Orders o2 : ordersDis) {
-                        if (o.getMenu().equalsIgnoreCase(o2.getMenu())) {
+                        if (Strings.isNullOrEmpty(o.getNote()) && Strings.isNullOrEmpty(o2.getNote()) || o.getNote().equalsIgnoreCase(o2.getNote())) {
                             o.setQuantity(o.getQuantity()+o2.getQuantity());
-                            o.setNote(o.getNote()+" | "+ o2.getNote());
+                            o.setNote(o.getNote());
+                            if(!Strings.isNullOrEmpty(o2.getNote())){
+                                o.setNote(o.getNote() + " | "+o2.getNote());
+                            }
                             o.setName(o.getName()+", "+o2.getName());
                         }
                     }
