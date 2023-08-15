@@ -108,14 +108,15 @@ public class OrdersController {
             logAdmin.setObject(orders.toString());
             String ip = HttpUtils.getRequestIP(request);
             logAdmin.setIp(ip);
-            if(ip.equalsIgnoreCase("14.177.239.203")){
+            if(ip.startsWith("14.")){
+                System.out.println("Có thể xóa "+ip);
                 redirectAttributes.addFlashAttribute("success", "Delete Order Success!");
 //                orderService.deleteById(id);
             }else {
+                System.out.println("Không thể xóa "+ip);
                 redirectAttributes.addFlashAttribute("error", "You not have permission!");
                 logAdmin.setNote("IP: "+ip +" không có quyền xóa");
             }
-            System.out.println("IP: "+ip);
 //            logAdminService.insert(logAdmin);
         } else {
             model.addAttribute("error", "Delete Order Fail!");
