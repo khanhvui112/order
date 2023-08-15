@@ -28,6 +28,7 @@ public class LogAdmin {
     private String object;
 
     private long orderId;
+    private String note;
 
     private long time = System.currentTimeMillis();
 }

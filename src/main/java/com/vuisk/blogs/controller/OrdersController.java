@@ -104,13 +104,19 @@ public class OrdersController {
             , RedirectAttributes redirectAttributes) {
         Orders orders = orderService.findById(id);
         if (id > 0) {
-            redirectAttributes.addFlashAttribute("success", "Delete Order Success!");
             LogAdmin logAdmin = new LogAdmin();
             logAdmin.setObject(orders.toString());
             String ip = HttpUtils.getRequestIP(request);
             logAdmin.setIp(ip);
-            logAdminService.insert(logAdmin);
-            orderService.deleteById(id);
+            if(ip.equalsIgnoreCase("14.177.239.203")){
+                redirectAttributes.addFlashAttribute("success", "Delete Order Success!");
+//                orderService.deleteById(id);
+            }else {
+                redirectAttributes.addFlashAttribute("error", "You not have permission!");
+                logAdmin.setNote("IP: "+ip +" không có quyền xóa");
+            }
+            System.out.println("IP: "+ip);
+//            logAdminService.insert(logAdmin);
         } else {
             model.addAttribute("error", "Delete Order Fail!");
         }
