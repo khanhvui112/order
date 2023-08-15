@@ -25,7 +25,7 @@ public class BotController {
     public Response get(@RequestParam(value = "time", required = false, defaultValue = "0") String time,
                         @RequestParam(value = "type", required = false, defaultValue = "0") int type) {
         List<Orders> list = null;
-        if(type == 2){
+        if(1 > 1 && type == 2){
             list = orderService.findAll();
         }else{
             Calendar cal = Calendar.getInstance();
