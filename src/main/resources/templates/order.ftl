@@ -211,12 +211,12 @@
                                                     <#else>
                                                         <td></td>
                                                     </#if>
-                                                    <td>${(o.payment==1)?string("Đã CK","Chưa CK")}</td>
+                                                    <td class="${(o.payment==1)?string("bg-primary","bg-danger")}">${(o.payment==1)?string("Đã CK","Chưa CK")}</td>
                                                     <td>
                                                         <div class="btn-group btn-group-sm" role="group" aria-label="Hành động">
                                                             <a onclick="editOrder(${o.id})"
                                                                data-toggle="tooltip" data-placement="top"
-                                                               title="Edit" class="btn btn-primary btn-sm">
+                                                               title="Edit" class="btn btn-primary btn-sm text-white">
                                                                 <i class='fa fa-edit'></i>
                                                             </a>
                                                             <a  href="/orders/delete/${o.id}"
