@@ -5,10 +5,13 @@ import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
 import com.vuisk.blogs.model.entities.Orders;
 import com.vuisk.blogs.service.impl.OrdersServiceImpl;
+import com.vuisk.blogs.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/order")
@@ -38,7 +41,11 @@ public class OrdersApiController {
         return new Response(true, "Thành công",  orderService.insert(order));
     }
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    private Response updateOrder(@RequestBody Orders order){
+    private Response updateOrder(@RequestBody Orders order, HttpServletRequest request){
+        String ip = HttpUtils.getRequestIP(request);
+        if(!ip.startsWith("14.") && !ip.startsWith("0:")){
+            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
+        }
         Orders ordersDb = orderService.findById(order.getId());
         if(ordersDb == null){
             return new Response(false, "Không tìm thấy  ",  null);
@@ -53,7 +60,7 @@ public class OrdersApiController {
         if(order.getQuantity() == 0){
             return new Response(false, "Vui lòng nhập số lượng",  null);
         }
-        return new Response(true, "Thành công",  orderService.insert(order));
+        return new Response(true, "Thành công "+ip,  orderService.insert(order));
     }
     @GetMapping("/delete/{id}")
     public String deleteOrder(@PathVariable("id") Long id, Model model
