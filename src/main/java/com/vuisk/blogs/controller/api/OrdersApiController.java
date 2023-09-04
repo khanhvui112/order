@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -84,5 +87,38 @@ public class OrdersApiController {
             return "Order/edit";
         }
         return "redirect:/Orders";
+    }
+
+    @RequestMapping(value = "/updateTransaction", method = RequestMethod.POST)
+    private Response updateTransaction(@RequestBody List<String> lst, HttpServletRequest request){
+        String ip = HttpUtils.getRequestIP(request);
+        if(!ip.startsWith("14.") && !ip.startsWith("0:")){
+            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        long startTime = cal.getTimeInMillis();
+        startTime = startTime - 86400000;
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        long endTime = cal.getTimeInMillis();
+        endTime = endTime - 86400000;
+        List<Orders> orders = orderService.findByCreate(startTime, endTime);
+        List<Orders> outs = new ArrayList<>();
+        if(orders != null && !orders.isEmpty()){
+            for (Orders o : orders){
+                for(String s : lst){
+                    if(o.getName().equalsIgnoreCase(s));
+                    o.setPayment(true);
+                    orderService.update(o);
+                    outs.add(o);
+                }
+            }
+        }
+        return new Response(true, "Thành công "+ip,  outs);
     }
 }

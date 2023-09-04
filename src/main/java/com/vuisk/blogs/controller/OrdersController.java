@@ -23,10 +23,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/orders")
@@ -41,7 +38,8 @@ public class OrdersController {
 
     @GetMapping
     public String Orders(@RequestParam(value = "time", required = false, defaultValue = "0") String time, Model model,
-                         @RequestParam(value = "type", required = false, defaultValue = "0") int type) {
+                         @RequestParam(value = "type", required = false, defaultValue = "0") int type,
+                         HttpServletRequest request) {
         List<Orders> list = null;
         if (type == 2) {
             list = orderService.findAll();
@@ -83,6 +81,9 @@ public class OrdersController {
         if (menus == null) {
             menus = new ArrayList<>();
         }
+        System.out.println(request.getRemoteAddr());;
+//        String add = HttpUtils.getMAC();
+        System.out.println("IP2: "+getClientIpAddress(request));;
         model.addAttribute("menus", menus);
         return "order";
     }
@@ -136,5 +137,16 @@ public class OrdersController {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return format.format(date);
+    }
+    public static String getClientIpAddress(HttpServletRequest request) {
+        String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+        if (xForwardedForHeader == null) {
+            return request.getRemoteAddr();
+        } else {
+            // As of https://en.wikipedia.org/wiki/X-Forwarded-For
+            // The general format of the field is: X-Forwarded-For: client, proxy1, proxy2 ...
+            // we only want the client
+            return new StringTokenizer(xForwardedForHeader, ",").nextToken().trim();
+        }
     }
 }

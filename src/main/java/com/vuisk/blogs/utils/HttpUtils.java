@@ -1,6 +1,9 @@
 package com.vuisk.blogs.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 
 public final class HttpUtils {
 
@@ -30,5 +33,22 @@ public final class HttpUtils {
             return parts[0];
         }
         return request.getRemoteAddr();
+    }
+
+    public static String getMAC(InetAddress addr) throws SocketException
+    {
+        NetworkInterface iface
+                = NetworkInterface.getByInetAddress(addr);
+
+        byte[] mac = iface.getHardwareAddress();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mac.length; i++) {
+            sb.append(String.format(
+                    "%02X%s", mac[i],
+                    (i < mac.length - 1) ? "-" : ""));
+        }
+
+        return sb.toString();
     }
 }
