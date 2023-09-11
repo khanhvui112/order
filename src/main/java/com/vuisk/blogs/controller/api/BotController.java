@@ -77,14 +77,16 @@ public class BotController {
                     }
                 }
             }
+            int total = 0;
             for(Orders o : list){
                 mssg += o.getName()+" "+o.getQuantity()+"s: "+o.getMenu();
                 if(!Strings.isNullOrEmpty(o.getNote())){
                     mssg += "("+o.getNote() +")";
                 }
+                total += o.getQuantity();
                 mssg += "\n";
             }
-            mssg += "Tổng: "+list.size();
+            mssg += "Tổng: "+total;
         }
         System.out.println(mssg);
         return new Response(true, mssg,  null);
