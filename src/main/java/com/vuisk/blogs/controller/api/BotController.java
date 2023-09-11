@@ -3,10 +3,13 @@ package com.vuisk.blogs.controller.api;
 import com.google.common.base.Strings;
 import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
+import com.vuisk.blogs.model.entities.Config;
 import com.vuisk.blogs.model.entities.Orders;
+import com.vuisk.blogs.service.impl.ConfigServiceImpl;
 import com.vuisk.blogs.service.impl.OrdersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,13 +18,14 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/getMessage")
+@RequestMapping("/api")
 public class BotController {
 
     @Autowired
     private OrdersServiceImpl orderService;
-
-    @RequestMapping
+    @Autowired
+    private ConfigServiceImpl configService;
+    @RequestMapping("/getMessage")
     public Response get(@RequestParam(value = "time", required = false, defaultValue = "0") String time,
                         @RequestParam(value = "type", required = false, defaultValue = "0") int type) {
         List<Orders> list = null;
@@ -60,13 +64,15 @@ public class BotController {
                 list.removeAll(ordersDis);
                 for (Orders o : list) {
                     for (Orders o2 : ordersDis) {
-                        if (Strings.isNullOrEmpty(o.getNote()) && Strings.isNullOrEmpty(o2.getNote()) || o.getNote().equalsIgnoreCase(o2.getNote())) {
-                            o.setQuantity(o.getQuantity()+o2.getQuantity());
-                            o.setNote(o.getNote());
-                            if(!Strings.isNullOrEmpty(o2.getNote())){
-                                o.setNote(o.getNote() + " | "+o2.getNote());
+                        if(o.getMenu().equalsIgnoreCase(o2.getMenu())){
+                            if (Strings.isNullOrEmpty(o.getNote()) && Strings.isNullOrEmpty(o2.getNote()) || o.getNote().equalsIgnoreCase(o2.getNote())) {
+                                o.setQuantity(o.getQuantity()+o2.getQuantity());
+                                o.setNote(o.getNote());
+                                if(!Strings.isNullOrEmpty(o2.getNote())){
+                                    o.setNote(o.getNote() + " | "+o2.getNote());
+                                }
+                                o.setName(o.getName()+", "+o2.getName());
                             }
-                            o.setName(o.getName()+", "+o2.getName());
                         }
                     }
                 }
@@ -80,7 +86,29 @@ public class BotController {
             }
             mssg += "Tổng: "+list.size();
         }
+        System.out.println(mssg);
         return new Response(true, mssg,  null);
     }
 
+
+    @RequestMapping(value = "/getToken", method = RequestMethod.GET)
+    public Response getToken(){
+        List<Config> configs = configService.findByName("TOKEN");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            return new Response(true, "Lấy token thành công",  config.getValue());
+        }
+        return new Response(false, "Lấy token thất bại",  null);
+    }
+    @RequestMapping("/updateToken")
+    public Response updateToken(@RequestParam String token){
+        List<Config> configs = configService.findByName("TOKEN");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            config.setValue(token);
+            configService.update(config);
+            return new Response(true, "Update token thành công",  config.getValue());
+        }
+        return new Response(false, "Update token thất bại",  null);
+    }
 }
