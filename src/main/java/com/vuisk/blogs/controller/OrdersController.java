@@ -69,6 +69,7 @@ public class OrdersController {
                 } else {
                     out.setPayment(0);
                 }
+                out.setNote(o.getNote().trim());
                 out.setDepartment(o.getDepartment());
                 out.setCreateTime(convertTime(o.getCreateTime()));
                 out.setQuantity(o.getQuantity());

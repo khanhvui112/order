@@ -25,6 +25,7 @@ public class OrdersServiceImpl implements OrderService {
 
     @Override
     public Orders insert(Orders order) {
+        order.setNote(order.getNote().trim());
         return ordersRepository.save(order);
     }
 
