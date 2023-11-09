@@ -93,6 +93,15 @@ public class BotController {
     }
 
 
+    @RequestMapping(value = "/getRefreshToken", method = RequestMethod.GET)
+    public Response getRefreshToken(){
+        List<Config> configs = configService.findByName("REFRESH_TOKEN");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            return new Response(true, "Lấy token thành công",  config.getValue());
+        }
+        return new Response(false, "Lấy token thất bại",  null);
+    }
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
     public Response getToken(){
         List<Config> configs = configService.findByName("TOKEN");
@@ -105,6 +114,17 @@ public class BotController {
     @RequestMapping("/updateToken")
     public Response updateToken(@RequestParam String token){
         List<Config> configs = configService.findByName("TOKEN");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            config.setValue(token);
+            configService.update(config);
+            return new Response(true, "Update token thành công",  config.getValue());
+        }
+        return new Response(false, "Update token thất bại",  null);
+    }
+    @RequestMapping("/updateRefreshToken")
+    public Response updateRefreshToken(@RequestParam String token){
+        List<Config> configs = configService.findByName("REFRESH_TOKEN");
         if(configs != null && !configs.isEmpty()){
             Config config = configs.get(0);
             config.setValue(token);

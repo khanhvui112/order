@@ -1,4 +1,6 @@
 # This is a sample Python script.
+import json
+
 import telegram
 from telegram import Bot
 from telethon import TelegramClient, sync, events
@@ -13,12 +15,15 @@ token = '6147813580:AAFIk_mSvZ-Aubwuevcrf0UftWemU1AsFFM'
 message = "Working..."
 phone = '+84985574580'
 client = TelegramClient('session', api_id, api_hash)
-
+BASE_API = 'https://dat-com.site/api';
+API_REFRESH = 'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/token'
+API_TECH = (
+    "https://onlinebanking.techcombank.com.vn/api/transaction-manager/client-api/v2/transactions?from=0&size=20");
 # connecting and building the session
 client.connect()
 
-URL = "http://localhost:8080/api/getMessage?type=2"
-
+URL = "https://dat-com.site/api/getMessage?type=2"
+from datetime import datetime
 
 def _telegrambot():
     if not client.is_user_authorized():
@@ -39,7 +44,7 @@ async def send(msg):
         msg = 'No data'
     else:
         msg = r['message']
-    await bot.sendMessage(chat_id=-959717704, text=msg)
+    # await bot.sendMessage(chat_id=-959717704, text=msg)
     print('Message Sent!')
 
 
@@ -54,7 +59,72 @@ if __name__ == '__main__':
 def run():
     asyncio.run(send(msg='Đặt cơm'))
 
+def _refreshToken():
+    try:
+        r = requests.get(url=BASE_API+'/getRefreshToken');
+        if r.status_code == 200:
+            data = r.json();
+            token =data['data'];
+            print('REFRESH TOKEN');
+            data = {
+                'grant_type': 'refresh_token',
+                'scope': 'openid',
+                'refresh_token': token,
+                'client_id': 'tcb-web-client',
+                'ui_locales': 'vi',
+            };
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            r = requests.post(url=API_REFRESH, data=data, headers=headers);
+            if r.status_code == 200:
+                print('REFRESH TOKEN THÀNH CÔNG');
+                data = r.json();
+                # Cập nhật token refresh
+                r = requests.get(url=BASE_API + '/updateRefreshToken?token=' + data['refresh_token']);
+                # Cập nhật token
+                requests.get(url=BASE_API + '/updateToken?token=' + data['access_token']);
+                _history()
+                print(r.json())
+            else:
+                print('REFRESH TOKEN THẤT BẠI');
+                print(r.json())
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print(str(e))
 
+def _history():
+    try:
+        r = requests.get(url=BASE_API+'/getToken');
+        if r.status_code == 200:
+            data = r.json();
+            token =data['data'];
+            # param = '';
+            yesterday = datetime.now() # - timedelta(1)
+            yesterday = yesterday.strftime('%Y-%m-%d');
+            today = datetime.now().strftime('%Y-%m-%d');
+            # paramAll = '&bookingDateGreaterThan=2023-07-27&bookingDateLessThan=2023-08-27'
+            param = '&bookingDateGreaterThan=' + yesterday + '&bookingDateLessThan=' + today
+            print(param)
+            r = requests.get(url=API_TECH + param,
+                             headers={
+                                 'Authorization': 'Bearer {}'.format(token)}
+                             );
+            datas = r.json();
+            if r.status_code == 200:
+                print(datas)
+                lst = []
+                for d in datas:
+                    lst.append(d['description'])
+                print(json.dumps(lst))
+                body = json.dumps(lst);
+                body = str(body);
+                body = json.loads(body)
+                call = requests.post(url=BASE_API+'/order/updateTransaction', json=body, headers={"Content-Type": "application/json; charset=utf-8"})
+                print(call)
+            else:
+                print('Lỗi r')
+    except requests.exceptions.RequestException as e:
+        print(str(e))
+schedule.every(4).minutes.do(_refreshToken)
+schedule.every(30).seconds.do(_history)
 schedule.every().day.at("10:45").do(run)
 while True:
     schedule.run_pending()

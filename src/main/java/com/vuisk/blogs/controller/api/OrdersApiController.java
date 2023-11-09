@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -101,24 +104,33 @@ public class OrdersApiController {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         long startTime = cal.getTimeInMillis();
-        startTime = startTime - 86400000;
+//        startTime = startTime - 86400000;//Ngayf hom qua
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         long endTime = cal.getTimeInMillis();
-        endTime = endTime - 86400000;
+//        endTime = endTime - 86400000;
         List<Orders> orders = orderService.findByCreate(startTime, endTime);
         List<Orders> outs = new ArrayList<>();
         if(orders != null && !orders.isEmpty()){
             for (Orders o : orders){
-                for(String s : lst){
-                    if(o.getName().equalsIgnoreCase(s));
-                    o.setPayment(true);
-                    orderService.update(o);
-                    outs.add(o);
+                if(!o.isPayment()){
+                    for(String s : lst){
+                        if(o.getName().equalsIgnoreCase(s.substring(0, s.indexOf(" ")))){
+                            o.setPayment(true);
+                            o.setNote(o.getNote()+"(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
+                            orderService.update(o);
+                            outs.add(o);
+                        }
+                    }
                 }
             }
         }
         return new Response(true, "Thành công "+ip,  outs);
+    }
+    public static String convertTime(long time) {
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        return format.format(date);
     }
 }
