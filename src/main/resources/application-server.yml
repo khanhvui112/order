@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 app:
   file:
 #    location: D:/Chipo/Admin-Angular-CRUD/src/main/resources/static/ D:/Java/OrderCom/blogs-main
@@ -17,9 +17,10 @@ spring:
     template-loader-path: classpath:/templates
     suffix: .ftl
   datasource:
-    url: jdbc:mysql://localhost:3306/orders
-    username: orders
-    password: 23102000
+    url: jdbc:mysql://db-mysql-sgp1-69325-do-user-15076357-0.c.db.ondigitalocean.com:25060/orders
+#    mysql://doadmin:AVNS_7pL71OBQbbrp0yF_NkY@db-mysql-sgp1-69325-do-user-15076357-0.c.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED
+    username: doadmin
+    password: AVNS_7pL71OBQbbrp0yF_NkY
     driver-class-name: com.mysql.cj.jdbc.Driver
     maximum-pool-size: 20
     hikari:
