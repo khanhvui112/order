@@ -31,7 +31,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Config update(Config config) {
-        return null;
+        return configRepository.save(config);
     }
 
     @Override
