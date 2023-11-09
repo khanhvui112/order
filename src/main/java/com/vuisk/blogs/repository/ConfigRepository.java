@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ConfigRepository extends JpaRepository<Config, Long> {
-    @Query("SELECT u FROM Config u WHERE u.name >= ?1")
+    @Query("SELECT u FROM Config u WHERE u.name = ?1")
     List<Config> findByName(String name);
 }
