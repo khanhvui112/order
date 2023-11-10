@@ -98,7 +98,7 @@ public class OrdersApiController {
         List<Config> configs = configService.findByName("IP_ACCEPT");
         List<String> ips = new ArrayList<>(Arrays.asList(configs.get(0).getValue().split(",")));
         if(!ips.contains(ip) || !ip.startsWith("14.") && !ip.startsWith("0:")){//!ip.startsWith("14.") && !ip.startsWith("0:") ||
-            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
+            // return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
         }
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
