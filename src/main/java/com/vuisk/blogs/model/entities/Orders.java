@@ -28,5 +28,7 @@ public class Orders {
 
     private boolean payment;
 
+    private String notePayment;
+
     private long createTime = System.currentTimeMillis();
 }

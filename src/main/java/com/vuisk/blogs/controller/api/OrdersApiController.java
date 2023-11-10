@@ -119,9 +119,9 @@ public class OrdersApiController {
                 if(!o.isPayment()){
                     for(String s : lst){
                         List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
-                        if(o.getName().equalsIgnoreCase(names.get(0))){
+                        if(o.getName().trim().equalsIgnoreCase(names.get(0).trim())){
                             o.setPayment(true);
-                            o.setNote(o.getNote()+"(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
+                            o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
                             orderService.update(o);
                             outs.add(o);
                         }
