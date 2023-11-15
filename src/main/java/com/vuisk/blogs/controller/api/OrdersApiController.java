@@ -122,7 +122,7 @@ public class OrdersApiController {
                     for(String s : lst){
                         List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
                         String name = names.get(0).trim();//Van A
-                        name = name.substring(0, name.indexOf(" "));//Van
+                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
                         String nameOrder = covertToString(o.getName().trim());//
                         String nameTrim = s.substring(0, getIndexLow(s)).trim();
                         if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
