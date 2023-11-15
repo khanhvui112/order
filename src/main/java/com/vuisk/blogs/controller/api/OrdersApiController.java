@@ -128,6 +128,7 @@ public class OrdersApiController {
                         if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
+                            o.setDescriptionPayment(s);
                             orderService.update(o);
                             outs.add(o);
                         }
