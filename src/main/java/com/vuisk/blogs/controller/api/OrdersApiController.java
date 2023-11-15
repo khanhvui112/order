@@ -121,10 +121,10 @@ public class OrdersApiController {
                 if(!o.isPayment()){
                     for(String s : lst){
                         List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
-                        String name = names.get(0).trim();
-                        name = name.substring(0, name.indexOf(" "));
-                        String nameOrder = covertToString(o.getName().trim());
-                        if(nameOrder.equalsIgnoreCase(name)){
+                        String name = names.get(0).trim();//Van A
+                        name = name.substring(0, name.indexOf(" "));//Van
+                        String nameOrder = covertToString(o.getName().trim());//
+                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim())){
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
                             orderService.update(o);
