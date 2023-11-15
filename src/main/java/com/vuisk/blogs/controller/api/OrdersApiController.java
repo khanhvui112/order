@@ -15,8 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.Format;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/order")
@@ -50,7 +52,7 @@ public class OrdersApiController {
     private Response updateOrder(@RequestBody Orders order, HttpServletRequest request){
         String ip = HttpUtils.getRequestIP(request);
         if(!ip.startsWith("14.") && !ip.startsWith("0:")){
-            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
+//            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
         }
         Orders ordersDb = orderService.findById(order.getId());
         if(ordersDb == null){
@@ -119,7 +121,10 @@ public class OrdersApiController {
                 if(!o.isPayment()){
                     for(String s : lst){
                         List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
-                        if(o.getName().trim().equalsIgnoreCase(names.get(0).trim())){
+                        String name = names.get(0).trim();
+                        name = name.substring(0, name.indexOf(" "));
+                        String nameOrder = covertToString(o.getName().trim());
+                        if(nameOrder.equalsIgnoreCase(name)){
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
                             orderService.update(o);
@@ -131,6 +136,17 @@ public class OrdersApiController {
         }
         return new Response(true, "Thành công "+ip,  outs);
     }
+    public String covertToString(String value) {
+        try {
+            String temp = Normalizer.normalize(value, Normalizer.Form.NFD);
+            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+            return pattern.matcher(temp).replaceAll("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
     public static String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
