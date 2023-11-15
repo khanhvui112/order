@@ -7,7 +7,10 @@ import com.vuisk.blogs.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
+
 @Service
 public class OrdersServiceImpl implements OrderService {
     @Autowired
@@ -26,11 +29,24 @@ public class OrdersServiceImpl implements OrderService {
     @Override
     public Orders insert(Orders order) {
         order.setNote(order.getNote().trim());
+        order.setPayment(false);
+        String p = covertToString(order.getName().trim()) + " "+ order.getDepartment();
+        order.setDescription(p.trim());
         return ordersRepository.save(order);
     }
-
+    public String covertToString(String value) {
+        try {
+            String temp = Normalizer.normalize(value, Normalizer.Form.NFD);
+            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+            return pattern.matcher(temp).replaceAll("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
     @Override
     public Orders update(Orders order) {
+        order.setPayment(false);
         return ordersRepository.save(order);
     }
 

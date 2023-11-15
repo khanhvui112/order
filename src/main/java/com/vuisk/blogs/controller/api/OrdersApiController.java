@@ -30,76 +30,78 @@ public class OrdersApiController {
     private ConfigServiceImpl configService;
 
     @GetMapping("/details/{id}")
-    private String OrdersShow(Model model, @PathVariable("id") Long id){
+    private String OrdersShow(Model model, @PathVariable("id") Long id) {
         model.addAttribute("orders", orderService.findById(id));
         return "order";
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    private Response insertOrder(@RequestBody Orders order){
-        if(Strings.isNullOrEmpty(order.getName())){
-            return new Response(false, "Vui lòng nhập tên",  null);
+    private Response insertOrder(@RequestBody Orders order) {
+        if (Strings.isNullOrEmpty(order.getName())) {
+            return new Response(false, "Vui lòng nhập tên", null);
         }
-        if(Strings.isNullOrEmpty(order.getMenu())){
-            return new Response(false, "Vui lòng chọn món",  null);
+        if (Strings.isNullOrEmpty(order.getMenu())) {
+            return new Response(false, "Vui lòng chọn món", null);
         }
-        if(order.getQuantity() == 0){
-            return new Response(false, "Vui lòng nhập số lượng",  null);
+        if (order.getQuantity() == 0) {
+            return new Response(false, "Vui lòng nhập số lượng", null);
         }
-        return new Response(true, "Thành công",  orderService.insert(order));
+        return new Response(true, "Thành công", orderService.insert(order));
     }
+
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    private Response updateOrder(@RequestBody Orders order, HttpServletRequest request){
+    private Response updateOrder(@RequestBody Orders order, HttpServletRequest request) {
         String ip = HttpUtils.getRequestIP(request);
-        if(!ip.startsWith("14.") && !ip.startsWith("0:")){
+        if (!ip.startsWith("14.") && !ip.startsWith("0:")) {
 //            return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
         }
         Orders ordersDb = orderService.findById(order.getId());
-        if(ordersDb == null){
-            return new Response(false, "Không tìm thấy  ",  null);
+        if (ordersDb == null) {
+            return new Response(false, "Không tìm thấy  ", null);
         }
         order.setCreateTime(ordersDb.getCreateTime());
-        if(Strings.isNullOrEmpty(order.getName())){
-            return new Response(false, "Vui lòng nhập tên",  null);
+        if (Strings.isNullOrEmpty(order.getName())) {
+            return new Response(false, "Vui lòng nhập tên", null);
         }
-        if(Strings.isNullOrEmpty(order.getMenu())){
-            return new Response(false, "Vui lòng chọn món",  null);
+        if (Strings.isNullOrEmpty(order.getMenu())) {
+            return new Response(false, "Vui lòng chọn món", null);
         }
-        if(order.getQuantity() == 0){
-            return new Response(false, "Vui lòng nhập số lượng",  null);
+        if (order.getQuantity() == 0) {
+            return new Response(false, "Vui lòng nhập số lượng", null);
         }
-        return new Response(true, "Thành công "+ip,  orderService.insert(order));
+        return new Response(true, "Thành công " + ip, orderService.insert(order));
     }
+
     @GetMapping("/delete/{id}")
     public String deleteOrder(@PathVariable("id") Long id, Model model
-            , RedirectAttributes redirectAttributes){
+            , RedirectAttributes redirectAttributes) {
 
-        if (id > 0){
+        if (id > 0) {
             redirectAttributes.addFlashAttribute("success", "Delete Order Success!");
             orderService.deleteById(id);
-        }else{
-            model.addAttribute("error","Delete Order Fail!");
+        } else {
+            model.addAttribute("error", "Delete Order Fail!");
         }
         return "redirect:/Orders";
     }
 
     @GetMapping("/edit/{id}")
-    private String ediOrder(@PathVariable("id") Long id, Model model){
+    private String ediOrder(@PathVariable("id") Long id, Model model) {
 
-        if (id > 0){
-            model.addAttribute("categories",orderService.findAll());
-            model.addAttribute("Order",orderService.findById(id));
+        if (id > 0) {
+            model.addAttribute("categories", orderService.findAll());
+            model.addAttribute("Order", orderService.findById(id));
             return "Order/edit";
         }
         return "redirect:/Orders";
     }
 
     @RequestMapping(value = "/updateTransaction", method = RequestMethod.POST)
-    private Response updateTransaction(@RequestBody List<String> lst, HttpServletRequest request){
+    private Response updateTransaction(@RequestBody List<String> lst, HttpServletRequest request) {
         String ip = HttpUtils.getRequestIP(request);
         List<Config> configs = configService.findByName("IP_ACCEPT");
         List<String> ips = new ArrayList<>(Arrays.asList(configs.get(0).getValue().split(",")));
-        if(!ips.contains(ip) || !ip.startsWith("14.") && !ip.startsWith("0:")){//!ip.startsWith("14.") && !ip.startsWith("0:") ||
+        if (!ips.contains(ip) || !ip.startsWith("14.") && !ip.startsWith("0:")) {//!ip.startsWith("14.") && !ip.startsWith("0:") ||
             // return new Response(false, "Bạn không thể cập nhật bản ghi này "+ip,  null);
         }
         Calendar cal = Calendar.getInstance();
@@ -116,28 +118,36 @@ public class OrdersApiController {
 //        endTime = endTime - 86400000;
         List<Orders> orders = orderService.findByCreate(startTime, endTime);
         List<Orders> outs = new ArrayList<>();
-        if(orders != null && !orders.isEmpty()){
-            for (Orders o : orders){
-                if(!o.isPayment()){
-                    for(String s : lst){
+        if (orders != null && !orders.isEmpty()) {
+            for (Orders o : orders) {
+                if (!o.isPayment()) {
+                    for (String s : lst) {
                         List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
-                        String name = names.get(0).trim();//Van A
-                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
-                        String nameOrder = covertToString(o.getName().trim());//
-                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
-                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
+                        String name = names.get(0).trim();//hong anh
+//                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
+//                        String nameOrder = covertToString(o.getName().trim());//
+//                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
+                        if (!Strings.isNullOrEmpty(o.getDescription()) && o.getDescription().equalsIgnoreCase(s)) {
                             o.setPayment(true);
-                            o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
+                            o.setNotePayment("(Bot đã cập nhật thanh toán lúc: " + convertTime(System.currentTimeMillis()) + ")");
                             o.setDescriptionPayment(s);
                             orderService.update(o);
                             outs.add(o);
                         }
+//                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
+//                            o.setPayment(true);
+//                            o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
+//                            o.setDescriptionPayment(s);
+//                            orderService.update(o);
+//                            outs.add(o);
+//                        }
                     }
                 }
             }
         }
-        return new Response(true, "Thành công "+ip,  outs);
+        return new Response(true, "Thành công " + ip, outs);
     }
+
     public String covertToString(String value) {
         try {
             String temp = Normalizer.normalize(value, Normalizer.Form.NFD);
@@ -151,14 +161,15 @@ public class OrdersApiController {
 
     public int getIndexLow(String s) {
         int index = 0;
-        for(char c : s.toCharArray()){
-            if(Character.isLowerCase(c)){
+        for (char c : s.toCharArray()) {
+            if (Character.isLowerCase(c)) {
                 break;
             }
             index++;
         }
         return index;
     }
+
     public static String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");

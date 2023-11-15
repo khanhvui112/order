@@ -125,14 +125,14 @@
                                     <label for="note" class="col-form-label">Ghi chú:</label>
                                     <textarea class="form-control note-order" id="note"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Trạng thái thanh toán:</label>
-                                    <select class="custom-select payment" id="payment">
-                                        <option value="0" selected>Chọn trạng thái...</option>
-                                        <option value="1">Đã CK</option>
-                                        <option value="0">Chưa CK</option>
-                                    </select>
-                                </div>
+<#--                                <div class="form-group">-->
+<#--                                    <label class="col-form-label">Trạng thái thanh toán:</label>-->
+<#--                                    <select class="custom-select payment" id="payment">-->
+<#--                                        <option value="0" selected>Chọn trạng thái...</option>-->
+<#--                                        <option value="1">Đã CK</option>-->
+<#--                                        <option value="0">Chưa CK</option>-->
+<#--                                    </select>-->
+<#--                                </div>-->
 <#--                                <div class="form-group">-->
 <#--                                    <select id="example-single-selected">-->
 <#--                                        <option value="1">Option 1</option>-->
@@ -174,6 +174,7 @@
                                             <th>Số lượng</th>
                                             <th>Ghi chú</th>
                                             <th>Thời gian</th>
+                                            <th>Nội dung CK</th>
                                             <th class="text-center">Trạng thái thanh toán</th>
                                         </tr>
                                         </thead>
@@ -208,6 +209,11 @@
                                                     </#if>
                                                     <#if o.createTime??>
                                                         <td>${o.createTime}</td>
+                                                    <#else>
+                                                        <td></td>
+                                                    </#if>
+                                                    <#if o.description??>
+                                                        <td>${o.description}</td>
                                                     <#else>
                                                         <td></td>
                                                     </#if>

@@ -32,5 +32,8 @@ public class Orders {
 
     @Column(columnDefinition = "text")
     private String descriptionPayment;
+
+    private String description;
+
     private long createTime = System.currentTimeMillis();
 }
