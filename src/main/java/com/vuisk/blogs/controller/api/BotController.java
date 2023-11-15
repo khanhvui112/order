@@ -128,9 +128,19 @@ public class BotController {
         if(configs != null && !configs.isEmpty()){
             Config config = configs.get(0);
             config.setValue(token);
+            config.setUpdateTime(System.currentTimeMillis());
             configService.update(config);
             return new Response(true, "Update token thành công",  config.getValue());
         }
         return new Response(false, "Update token thất bại",  null);
+    }
+    @RequestMapping(value = "/lastUpdateRefreshToken", method = RequestMethod.GET)
+    public Response lastUpdateRefreshToken(){
+        List<Config> configs = configService.findByName("REFRESH_TOKEN");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            return new Response(true, "Lấy token thành công",  config.getUpdateTime());
+        }
+        return new Response(false, "Lấy token thất bại",  null);
     }
 }

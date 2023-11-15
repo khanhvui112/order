@@ -44,7 +44,7 @@ async def send(msg):
         msg = 'No data'
     else:
         msg = r['message']
-    # await bot.sendMessage(chat_id=-959717704, text=msg)
+    await bot.sendMessage(chat_id=-959717704, text=msg)
     print('Message Sent!')
 
 
@@ -59,12 +59,13 @@ if __name__ == '__main__':
 def run():
     asyncio.run(send(msg='Đặt cơm'))
 
+
 def _refreshToken():
     try:
-        r = requests.get(url=BASE_API+'/getRefreshToken');
+        r = requests.get(url=BASE_API + '/getRefreshToken');
         if r.status_code == 200:
             data = r.json();
-            token =data['data'];
+            token = data['data'];
             print('REFRESH TOKEN');
             data = {
                 'grant_type': 'refresh_token',
@@ -86,10 +87,9 @@ def _refreshToken():
                 print(r.json())
             else:
                 print('REFRESH TOKEN THẤT BẠI');
-                print(r.json())
+                print(r.json());
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
-
 def _history():
     try:
         r = requests.get(url=BASE_API+'/getToken');
@@ -123,7 +123,24 @@ def _history():
                 print('Lỗi r')
     except requests.exceptions.RequestException as e:
         print(str(e))
-schedule.every(4).minutes.do(_refreshToken)
+def _lastUpdate():
+    try:
+        r = requests.get(url=BASE_API+'/lastUpdateRefreshToken');
+        if r.status_code == 200:
+            data = r.json();
+            updateTime = data['code'];
+            # 1700023200000
+            nextUpdate = updateTime + (60 * 4 * 1000)+(30*1000);
+            current_time_millis = int(round(time.time() * 1000))
+            if(current_time_millis >= nextUpdate):
+                _refreshToken();
+                print('Update TOKEN')
+            else:
+                print('Chưa update được: '+str(nextUpdate))
+            print(current_time_millis);
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print(str(e))
+schedule.every(20).seconds.do(_lastUpdate)
 schedule.every(30).seconds.do(_history)
 schedule.every().day.at("10:45").do(run)
 while True:

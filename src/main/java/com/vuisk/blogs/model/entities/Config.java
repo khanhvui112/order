@@ -20,4 +20,6 @@ public class Config {
 
     @Column(columnDefinition = "text")
     private String value;
+
+    private long updateTime;
 }
