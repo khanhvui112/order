@@ -124,7 +124,8 @@ public class OrdersApiController {
                         String name = names.get(0).trim();//Van A
                         name = name.substring(0, name.indexOf(" "));//Van
                         String nameOrder = covertToString(o.getName().trim());//
-                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim())){
+                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
+                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: "+convertTime(System.currentTimeMillis())+")");
                             orderService.update(o);
@@ -147,6 +148,16 @@ public class OrdersApiController {
         return value;
     }
 
+    public int getIndexLow(String s) {
+        int index = 0;
+        for(char c : s.toCharArray()){
+            if(Character.isLowerCase(c)){
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
     public static String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
