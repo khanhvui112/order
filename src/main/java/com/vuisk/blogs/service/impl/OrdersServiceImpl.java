@@ -29,7 +29,7 @@ public class OrdersServiceImpl implements OrderService {
     @Override
     public Orders insert(Orders order) {
         order.setNote(order.getNote().trim());
-        order.setPayment(false);
+//        order.setPayment(false);
         String p = covertToString(order.getName().trim()) + " "+ order.getDepartment();
         order.setDescription(p.trim());
         return ordersRepository.save(order);
@@ -46,7 +46,7 @@ public class OrdersServiceImpl implements OrderService {
     }
     @Override
     public Orders update(Orders order) {
-        order.setPayment(false);
+//        order.setPayment(false);
         return ordersRepository.save(order);
     }
 
