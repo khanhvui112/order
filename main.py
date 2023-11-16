@@ -2,6 +2,7 @@
 import json
 
 import telegram
+from requests.auth import HTTPBasicAuth
 from telegram import Bot
 from telethon import TelegramClient, sync, events
 import asyncio
@@ -16,56 +17,97 @@ message = "Working..."
 phone = '+84985574580'
 client = TelegramClient('session', api_id, api_hash)
 BASE_API = 'https://dat-com.site/api';
+# BASE_API = 'http://localhost:8081/api';
 API_REFRESH = 'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/token'
 API_TECH = (
     "https://onlinebanking.techcombank.com.vn/api/transaction-manager/client-api/v2/transactions?from=0&size=20");
+API_SEND_SMS = 'https://api.twilio.com/2010-04-01/Accounts/:AccountSid/Messages.json?From=+84985574580'
 # connecting and building the session
 client.connect()
-
-URL = "https://dat-com.site/api/getMessage?type=2"
+URL = BASE_API+"/getMessage?type=2"
 from datetime import datetime
+from twilio.rest import Client
 
+async def sendMsgToTele(msg):
+    try:
+        bot = telegram.Bot(token=token)
+        await bot.sendMessage(chat_id=-959717704, text=msg)
+    except Exception as e:
+        print(e)
+def _sendSMS(msg):
+    try:
+        account_sid = 'AC3893ee1c2c6e348f3fca2886ee53d0c9'
+        auth_token = 'bba1c616dda283430644977162fb4b82'
+        client = Client(account_sid, auth_token)
+        totalStr:int = msg.rfind('\n');
+        str = msg[totalStr:];
+        total = str.replace('\nTổng: ','')
+        msg = '\n\nCô ơi cho cháu '+total+'s tầng 16 ạ\n'+msg;
+        message = client.messages.create(
+            body=msg,
+            from_='+13367925013',
+            to='+84985574580'
+        )
+        msg = 'Robot đã đặt cơm'+msg;
+        asyncio.run(sendMsgToTele(msg=msg))
+    except Exception as e:
+        print(e)
 def _telegrambot():
     if not client.is_user_authorized():
         client.send_code_request(phone)
         client.sign_in(phone, input('Enter the code: '))
     try:
         bot = Bot(token)
-        bot.send_message(-959717704, 'test')
+        # bot.send_message(-959717704, 'test')
     except Exception as e:
         print(e);
 
 # Press the green button in the gutter to run the script.
-async def send(msg):
+def send():
     r = requests.get(url=URL)
     r = r.json();
-    bot = telegram.Bot(token=token)
     if (r['message'] == ''):
         msg = 'No data'
     else:
         msg = r['message']
-    await bot.sendMessage(chat_id=-959717704, text=msg)
-    print('Message Sent!')
+        _sendSMS(msg);
+    # await bot.sendMessage(chat_id=-959717704, text=msg)
+    # print('Message Sent!')
 
 
 if __name__ == '__main__':
     try:
-        asyncio.run(send(msg='Đặt cơm'))
+        send()
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
 
 
 # schedule.every(5).seconds.do(chat_to_user)
-def run():
-    asyncio.run(send(msg='Đặt cơm'))
-
-
-def _refreshToken():
+# def run():
+    # asyncio.run(send(msg='Đặt cơm'))
+def _lastUpdate():
     try:
-        r = requests.get(url=BASE_API + '/getRefreshToken');
+        r = requests.get(url=BASE_API+'/lastUpdateRefreshToken');
         if r.status_code == 200:
             data = r.json();
-            token = data['data'];
+            updateTime = data['code'];
+            # 1700023200000
+            nextUpdate = updateTime + (60 * 4 * 1000)+(30*1000);
+            current_time_millis = int(round(time.time() * 1000))
+            if(current_time_millis >= nextUpdate):
+                _refreshToken();
+                print('Update TOKEN')
+            else:
+                print('Chưa update được: '+str(nextUpdate))
+            print(current_time_millis);
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print(str(e))
+def _refreshToken():
+    try:
+        r = requests.get(url=BASE_API+'/getRefreshToken');
+        if r.status_code == 200:
+            data = r.json();
+            token =data['data'];
             print('REFRESH TOKEN');
             data = {
                 'grant_type': 'refresh_token',
@@ -87,9 +129,10 @@ def _refreshToken():
                 print(r.json())
             else:
                 print('REFRESH TOKEN THẤT BẠI');
-                print(r.json());
+                print(r.json())
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
+
 def _history():
     try:
         r = requests.get(url=BASE_API+'/getToken');
@@ -123,26 +166,10 @@ def _history():
                 print('Lỗi r')
     except requests.exceptions.RequestException as e:
         print(str(e))
-def _lastUpdate():
-    try:
-        r = requests.get(url=BASE_API+'/lastUpdateRefreshToken');
-        if r.status_code == 200:
-            data = r.json();
-            updateTime = data['code'];
-            # 1700023200000
-            nextUpdate = updateTime + (60 * 4 * 1000)+(30*1000);
-            current_time_millis = int(round(time.time() * 1000))
-            if(current_time_millis >= nextUpdate):
-                _refreshToken();
-                print('Update TOKEN')
-            else:
-                print('Chưa update được: '+str(nextUpdate))
-            print(current_time_millis);
-    except requests.exceptions.RequestException as e:  # This is the correct syntax
-        print(str(e))
 schedule.every(20).seconds.do(_lastUpdate)
 schedule.every(30).seconds.do(_history)
-schedule.every().day.at("10:45").do(run)
+schedule.every().day.at("10:50").do(send)
+# schedule.every(20).seconds.do(send)
 while True:
     schedule.run_pending()
     time.sleep(1)
