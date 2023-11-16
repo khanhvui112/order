@@ -46,10 +46,13 @@ def _sendSMS(msg):
             str = msg[totalStr:];
             total = str.replace('\nTổng: ','')
             msg = '\n\nCô ơi cho cháu '+total+'s tầng 16 ạ\n'+msg;
+            r = requests.get(url=BASE_API + '/getToPhone');
+            data = r.json();
+            phone = data['data'];
             message = client.messages.create(
                 body=msg,
                 from_='+13367925013',
-                to='+84985574580'
+                to=phone
             )
             msg = 'Robot đã đặt cơm'+msg;
             asyncio.run(sendMsgToTele(msg=msg))
