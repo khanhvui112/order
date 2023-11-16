@@ -54,6 +54,7 @@ def _sendSMS(msg):
             msg = 'Robot đã đặt cơm'+msg;
             asyncio.run(sendMsgToTele(msg=msg))
     except Exception as e:
+        asyncio.run(sendMsgToTele(msg='Robot gửi tin nhắn đặt cơm thất bại'))
         print(e)
 def _telegrambot():
     if not client.is_user_authorized():
