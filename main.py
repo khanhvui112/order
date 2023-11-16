@@ -36,20 +36,23 @@ async def sendMsgToTele(msg):
         print(e)
 def _sendSMS(msg):
     try:
-        account_sid = 'AC3893ee1c2c6e348f3fca2886ee53d0c9'
-        auth_token = 'bba1c616dda283430644977162fb4b82'
-        client = Client(account_sid, auth_token)
-        totalStr:int = msg.rfind('\n');
-        str = msg[totalStr:];
-        total = str.replace('\nTổng: ','')
-        msg = '\n\nCô ơi cho cháu '+total+'s tầng 16 ạ\n'+msg;
-        message = client.messages.create(
-            body=msg,
-            from_='+13367925013',
-            to='+84985574580'
-        )
-        msg = 'Robot đã đặt cơm'+msg;
-        asyncio.run(sendMsgToTele(msg=msg))
+        r = requests.get(url=BASE_API + '/getTokenSendSMS');
+        if r.status_code == 200:
+            data = r.json();
+            auth_token = data['data'];
+            account_sid = 'AC3893ee1c2c6e348f3fca2886ee53d0c9'
+            client = Client(account_sid, auth_token)
+            totalStr:int = msg.rfind('\n');
+            str = msg[totalStr:];
+            total = str.replace('\nTổng: ','')
+            msg = '\n\nCô ơi cho cháu '+total+'s tầng 16 ạ\n'+msg;
+            message = client.messages.create(
+                body=msg,
+                from_='+13367925013',
+                to='+84985574580'
+            )
+            msg = 'Robot đã đặt cơm'+msg;
+            asyncio.run(sendMsgToTele(msg=msg))
     except Exception as e:
         print(e)
 def _telegrambot():

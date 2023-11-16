@@ -143,4 +143,14 @@ public class BotController {
         }
         return new Response(false, "Lấy token thất bại",  null);
     }
+
+    @RequestMapping("/getTokenSendSMS")
+    public Response getTokenSendSMS(){
+        List<Config> configs = configService.findByName("TOKEN_TWILIO");
+        if(configs != null && !configs.isEmpty()){
+            Config config = configs.get(0);
+            return new Response(true, "Lấy token thành công",  config.getValue());
+        }
+        return new Response(false, "Lấy token thất bại",  null);
+    }
 }
