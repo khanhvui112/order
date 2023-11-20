@@ -22,6 +22,7 @@ API_REFRESH = 'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/prot
 
 API_TECH = (
     "https://onlinebanking.techcombank.com.vn/api/transaction-manager/client-api/v2/transactions?from=0&size=20");
+BASE_API_TECH = 'https://onlinebanking.techcombank.com.vn/api'
 API_SEND_SMS = 'https://api.twilio.com/2010-04-01/Accounts/:AccountSid/Messages.json?From=+84985574580'
 # connecting and building the session
 client.connect()
@@ -157,7 +158,7 @@ def _history():
             yesterday = yesterday.strftime('%Y-%m-%d');
             today = datetime.now().strftime('%Y-%m-%d');
             # paramAll = '&bookingDateGreaterThan=2023-07-27&bookingDateLessThan=2023-08-27'
-            param = '&bookingDateGreaterThan=' + yesterday + '&bookingDateLessThan=' + today
+            param = '&bookingDateGreaterThan=' + yesterday + '&bookingDateLessThan=' + today+'&categories=Income'
             print(param)
             r = requests.get(url=API_TECH + param,
                              headers={
@@ -183,9 +184,28 @@ def _history():
     except requests.exceptions.RequestException as e:
         print(str(e))
 
-
+def _refresh():
+    try:
+        r = requests.get(url=BASE_API + '/getToken');
+        if r.status_code == 200:
+            data = r.json();
+            token = data['data'];
+            data = {'externalArrangementIds': [
+                    '19038697466019'
+                ]}
+            body = json.dumps(data);
+            body = str(body);
+            body = json.loads(body)
+            call = requests.post(url=BASE_API_TECH + '/sync-dis/client-api/v1/transactions/refresh/arrangements', json=body,
+                                 headers={
+                                     'Authorization': 'Bearer {}'.format(token),
+                                     "Content-Type": "application/json; charset=utf-8"})
+            if call.status_code == 200:
+                _history()
+    except Exception as e:
+        print(e);
 schedule.every(20).seconds.do(_lastUpdate)
-schedule.every(30).seconds.do(_history)
+schedule.every(30).seconds.do(_refresh)
 schedule.every().day.at("10:50").do(send)
 # schedule.every(20).seconds.do(send)
 while True:
