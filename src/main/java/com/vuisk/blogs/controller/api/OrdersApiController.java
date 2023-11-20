@@ -4,8 +4,10 @@ import com.google.common.base.Strings;
 import com.vuisk.blogs.model.dto.OrdersOut;
 import com.vuisk.blogs.model.dto.Response;
 import com.vuisk.blogs.model.entities.Config;
+import com.vuisk.blogs.model.entities.HistoryPayment;
 import com.vuisk.blogs.model.entities.Orders;
 import com.vuisk.blogs.service.impl.ConfigServiceImpl;
+import com.vuisk.blogs.service.impl.HistoryPaymentServiceImpl;
 import com.vuisk.blogs.service.impl.OrdersServiceImpl;
 import com.vuisk.blogs.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class OrdersApiController {
     private OrdersServiceImpl orderService;
     @Autowired
     private ConfigServiceImpl configService;
+    @Autowired
+    private HistoryPaymentServiceImpl historyPaymentService;
 
     @GetMapping("/details/{id}")
     private String OrdersShow(Model model, @PathVariable("id") Long id) {
@@ -118,6 +122,7 @@ public class OrdersApiController {
 //        endTime = endTime - 86400000;
         List<Orders> orders = orderService.findByCreate(startTime, endTime);
         List<Orders> outs = new ArrayList<>();
+        String msg = "";
         if (orders != null && !orders.isEmpty()) {
             for (Orders o : orders) {
                 if (!o.isPayment()) {
@@ -132,6 +137,10 @@ public class OrdersApiController {
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: " + convertTime(System.currentTimeMillis()) + ")");
                             o.setDescriptionPayment(s);
                             orderService.update(o);
+                            HistoryPayment historyPayment = new HistoryPayment(o.getId(), s, o.getName());
+                            historyPayment.setStatus(true);
+                            historyPaymentService.insert(historyPayment);
+                            msg += historyPayment.getName()+" đã CK với nội dụng: "+historyPayment.getDescription() +"\n";
                             outs.add(o);
                         }
 //                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
@@ -145,7 +154,7 @@ public class OrdersApiController {
                 }
             }
         }
-        return new Response(true, "Thành công " + ip, outs);
+        return new Response(true, "Thành công " + ip, msg);
     }
 
     public String covertToString(String value) {

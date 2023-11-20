@@ -19,6 +19,7 @@ client = TelegramClient('session', api_id, api_hash)
 BASE_API = 'https://dat-com.site/api';
 # BASE_API = 'http://localhost:8081/api';
 API_REFRESH = 'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/token'
+
 API_TECH = (
     "https://onlinebanking.techcombank.com.vn/api/transaction-manager/client-api/v2/transactions?from=0&size=20");
 API_SEND_SMS = 'https://api.twilio.com/2010-04-01/Accounts/:AccountSid/Messages.json?From=+84985574580'
@@ -71,20 +72,25 @@ def _telegrambot():
 
 # Press the green button in the gutter to run the script.
 def send():
-    r = requests.get(url=URL)
-    r = r.json();
-    if (r['message'] == ''):
-        msg = 'No data'
-    else:
-        msg = r['message']
-        _sendSMS(msg);
+    try:
+        r = requests.get(url=URL)
+        r = r.json();
+        if (r['message'] == ''):
+            msg = 'No data'
+        else:
+            msg = r['message']
+            asyncio.run(sendMsgToTele(msg=msg))
+    except Exception as e:
+        print(e)
+        # _sendSMS(msg);
     # await bot.sendMessage(chat_id=-959717704, text=msg)
     # print('Message Sent!')
 
 
 if __name__ == '__main__':
     try:
-        send()
+        print('Start OK')
+        # send()
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(str(e))
 
@@ -168,11 +174,16 @@ def _history():
                 body = str(body);
                 body = json.loads(body)
                 call = requests.post(url=BASE_API+'/order/updateTransaction', json=body, headers={"Content-Type": "application/json; charset=utf-8"})
-                print(call)
+                data = call.json();
+                msg = data['data'];
+                if msg != '':
+                    asyncio.run(sendMsgToTele(msg=msg))
             else:
                 print('Lỗi r')
     except requests.exceptions.RequestException as e:
         print(str(e))
+
+
 schedule.every(20).seconds.do(_lastUpdate)
 schedule.every(30).seconds.do(_history)
 schedule.every().day.at("10:50").do(send)
