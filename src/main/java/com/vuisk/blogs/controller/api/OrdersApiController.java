@@ -132,7 +132,7 @@ public class OrdersApiController {
 //                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
 //                        String nameOrder = covertToString(o.getName().trim());//
 //                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
-                        if (!Strings.isNullOrEmpty(o.getDescription()) && o.getDescription().equalsIgnoreCase(s)) {
+                        if (!Strings.isNullOrEmpty(o.getDescription()) && o.getDescription().equalsIgnoreCase(s.trim())) {
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: " + convertTime(System.currentTimeMillis()) + ")");
                             o.setDescriptionPayment(s);
