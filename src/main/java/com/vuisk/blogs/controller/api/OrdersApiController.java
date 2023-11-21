@@ -127,12 +127,23 @@ public class OrdersApiController {
             for (Orders o : orders) {
                 if (!o.isPayment()) {
                     for (String s : lst) {
-                        List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));
+                        List<String> names = new ArrayList<>(Arrays.asList(s.split(",")));//
                         String name = names.get(0).trim();//hong anh
 //                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
 //                        String nameOrder = covertToString(o.getName().trim());//
 //                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
-                        if (!Strings.isNullOrEmpty(o.getDescription()) && o.getDescription().equalsIgnoreCase(s.trim())) {
+                        boolean isUpdate = false;
+                        if(s.contains(",")){
+                            for(String n : names){
+                                isUpdate = checkUpdate(o.getDescription(), n);
+                                if(isUpdate){
+                                    break;
+                                }
+                            }
+                        }else {
+                            isUpdate = checkUpdate(o.getDescription(), s);
+                        }
+                        if(isUpdate){
                             o.setPayment(true);
                             o.setNotePayment("(Bot đã cập nhật thanh toán lúc: " + convertTime(System.currentTimeMillis()) + ")");
                             o.setDescriptionPayment(s);
@@ -140,7 +151,7 @@ public class OrdersApiController {
                             HistoryPayment historyPayment = new HistoryPayment(o.getId(), s, o.getName());
                             historyPayment.setStatus(true);
                             historyPaymentService.insert(historyPayment);
-                            msg += historyPayment.getName()+" đã CK với nội dụng: "+historyPayment.getDescription() +"\n";
+                            msg += historyPayment.getName() + " đã CK với nội dụng: " + historyPayment.getDescription() + "\n";
                             outs.add(o);
                         }
 //                        if(nameOrder.equalsIgnoreCase(name) || nameOrder.equalsIgnoreCase(names.get(0).trim()) || nameTrim.equalsIgnoreCase(nameOrder)){
@@ -183,5 +194,8 @@ public class OrdersApiController {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return format.format(date);
+    }
+    private boolean checkUpdate(String desDb,String desInput){
+        return  !Strings.isNullOrEmpty(desDb) && desDb.trim().equalsIgnoreCase(desInput.trim());
     }
 }
