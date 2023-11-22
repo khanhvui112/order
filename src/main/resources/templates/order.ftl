@@ -220,9 +220,9 @@
 <#--                                                        <td></td>-->
 <#--                                                    </#if>-->
                                                     <#if o.qrPayment??>
-                                                        <td class="qr-code" index="${o.id}">
+                                                        <td>
                                                             <div class="btn-group btn-group-sm" role="group" aria-label="Hành động">
-                                                                <a onclick="showQR(${o.id})"
+                                                                <a class="qr-code" index="${o.id}" onclick="showQR(${o.id})"
                                                                    data-toggle="tooltip" data-placement="top"
                                                                    title="Hiển thị QR" class="btn btn-primary btn-sm text-white">
                                                                     <img id="qr-${o.id}" style="width: 50px;" src="${o.qrPayment}"/>
