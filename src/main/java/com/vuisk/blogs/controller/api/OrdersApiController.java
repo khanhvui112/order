@@ -63,6 +63,7 @@ public class OrdersApiController {
         if (ordersDb == null) {
             return new Response(false, "Không tìm thấy  ", null);
         }
+        order.setPayment(ordersDb.isPayment());
         order.setCreateTime(ordersDb.getCreateTime());
         if (Strings.isNullOrEmpty(order.getName())) {
             return new Response(false, "Vui lòng nhập tên", null);
