@@ -180,7 +180,7 @@
                                             <th>Món</th>
                                             <th>Số lượng</th>
                                             <th>Ghi chú</th>
-                                            <th>Thời gian</th>
+                                            <th>Mã QR</th>
                                             <th>Nội dung CK</th>
                                             <th class="text-center">Trạng thái thanh toán</th>
                                         </tr>
