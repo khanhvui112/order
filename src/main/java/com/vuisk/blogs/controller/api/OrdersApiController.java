@@ -132,7 +132,20 @@ public class OrdersApiController {
 //                        name = name.substring(0, name.contains(" ") ? name.indexOf(" ") : name.length());//Van
 //                        String nameOrder = covertToString(o.getName().trim());//
 //                        String nameTrim = s.substring(0, getIndexLow(s)).trim();
+
+                        //Replace string
+                        List<Config> replaces = configService.findByName("REPLACE_STRING");
+                        if(replaces != null && !replaces.isEmpty()){
+                            Config config = replaces.get(0);
+                            String regexs = config.getValue();
+                            List<String> lstRegex = new ArrayList<>(Arrays.asList(regexs.split("\\|")));
+                            for(String n : lstRegex){
+                                s = s.replaceAll(n, "");
+                            }
+                        }
+                        s = s.trim();
                         boolean isUpdate = false;
+
                         if(s.contains(",")){
                             for(String n : names){
                                 isUpdate = checkUpdate(o.getDescription(), n);
