@@ -75,6 +75,7 @@ public class OrdersController {
                 out.setQuantity(o.getQuantity());
                 out.setDescriptionPayment(o.getDescriptionPayment());
                 out.setDescription(o.getDescription());
+                out.setQrPayment(o.getQrPayment());
                 orders.add(out);
             }
         }

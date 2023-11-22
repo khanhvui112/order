@@ -35,5 +35,7 @@ public class Orders {
 
     private String description;
 
+    @Column(columnDefinition = "longtext")
+    private String qrPayment;
     private long createTime = System.currentTimeMillis();
 }

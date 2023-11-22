@@ -27,4 +27,6 @@ public class OrdersOut {
     private String descriptionPayment;
 
     private String description;
+
+    private String qrPayment;
 }

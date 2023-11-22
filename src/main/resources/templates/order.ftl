@@ -88,6 +88,13 @@
                 </div>
                 <!-- /# column -->
             </div>
+            <div class="modal fade" id="modelQR" tabindex="-1" role="dialog" aria-labelledby="modelQRLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -207,8 +214,21 @@
                                                     <#else>
                                                         <td></td>
                                                     </#if>
-                                                    <#if o.createTime??>
-                                                        <td>${o.createTime}</td>
+<#--                                                    <#if o.createTime??>-->
+<#--                                                        <td>${o.createTime}</td>-->
+<#--                                                    <#else>-->
+<#--                                                        <td></td>-->
+<#--                                                    </#if>-->
+                                                    <#if o.qrPayment??>
+                                                        <td class="qr-code" index="${o.id}">
+                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Hành động">
+                                                                <a onclick="showQR(${o.id})"
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="Hiển thị QR" class="btn btn-primary btn-sm text-white">
+                                                                    <img id="qr-${o.id}" style="width: 50px;" src="${o.qrPayment}"/>
+                                                                </a>
+                                                            </div>
+                                                        </td>
                                                     <#else>
                                                         <td></td>
                                                     </#if>
@@ -319,6 +339,14 @@
         });
     }
 
+    function showQR(id){
+        var src = $('#qr-'+id).attr('src');
+        $('#modelQR').modal();
+        const parent = $('#modelQR').find('.modal-content');
+        parent.empty();
+        parent.append('<img src="'+src+'"/>')
+    }
+
     function copyToSky(){
         var lst = JSON.parse('${orderJsons}');
         $('.open-popup').trigger('click')
@@ -348,6 +376,14 @@
         $('#exampleModal').modal();
     }
     $(document).ready(function() {
+        $(".qr-code").hover(function(){
+            $('#modelQR').modal();
+            var id = $(this).attr('index');
+            showQR(id);
+            // $(this).css("background-color", "yellow");
+        }, function(){
+            $('#modelQR').modal('hide');
+        });
         $('#multiple-checkboxes').multiselect({
             nonSelectedText: 'Chọn món',
             buttonText: function(options, select) {
