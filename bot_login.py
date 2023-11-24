@@ -20,6 +20,8 @@ username = '0985574580'
 password = 'Vui@231020'
 opts = uc.ChromeOptions()
 opts.add_argument('--no-sandbox')
+opts.add_argument('--headless')
+opts.add_argument('--disable-dev-shm-usage')
 opts.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
 def _refreshToken(token):
     try:
@@ -128,7 +130,7 @@ def _history():
         print(str(e))
 
 
-schedule.every(30).seconds.do(_history)
+schedule.every(5).seconds.do(_history)
 while True:
     schedule.run_pending()
     time.sleep(1)
