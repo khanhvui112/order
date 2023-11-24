@@ -19,6 +19,7 @@ API_TECH = (
 username = '0985574580'
 password = 'Vui@231020'
 opts = uc.ChromeOptions()
+opts.add_argument('--no-sandbox')
 opts.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
 def _refreshToken(token):
     try:
