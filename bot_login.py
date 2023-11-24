@@ -124,13 +124,16 @@ def _history():
                 body = str(body);
                 body = json.loads(body)
                 requests.post(url=BASE_API+'/order/updateTransaction', json=body, headers={"Content-Type": "application/json; charset=utf-8"})
+                print('Lấy LS thành công')
             else:
+                print('Lấy LS thất bại đăng nhập ngay')
                 _login_bank()
     except requests.exceptions.RequestException as e:
         print(str(e))
 
-
-schedule.every(5).seconds.do(_history)
+if __name__ == '__main__':
+    _history()
+schedule.every(2).hours.do(_history)
 while True:
     schedule.run_pending()
     time.sleep(1)
