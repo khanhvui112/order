@@ -7,6 +7,9 @@ import undetected_chromedriver as uc
 import schedule
 import time
 from datetime import datetime
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 BASE_API = 'https://dat-com.site/api';
 API_REFRESH = 'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/token'
@@ -47,10 +50,9 @@ def process_browser_log_entry(entry):
     return response
 
 def _login_bank():
-    driver = webdriver.Chrome(options=opts)
+    driver = webdriver.Chrome(options=opts, service=Service(ChromeDriverManager().install()))
     driver.get(
         'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/auth?response_type=code&client_id=tcb-web-client&state=V0hFfm55d3RUQ3NRcmlqaGFnUWVwRjR4RTIzckpuVnVEMWFZcF8xNXkwTEt4&redirect_uri=https%3A%2F%2Fonlinebanking.techcombank.com.vn%2Fredirect&scope=openid&code_challenge=8qW97nK9Hh8nJ-ryzRH17WiYZ4RvOapCoe3t_TEacgc&code_challenge_method=S256&nonce=V0hFfm55d3RUQ3NRcmlqaGFnUWVwRjR4RTIzckpuVnVEMWFZcF8xNXkwTEt4&ui_locales=en-US')
-
     isRun = True;
     while True:
         try:
