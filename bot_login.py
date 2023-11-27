@@ -7,6 +7,7 @@ import undetected_chromedriver as uc
 import schedule
 import time
 from datetime import datetime
+from datetime import date
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -52,12 +53,24 @@ def process_browser_log_entry(entry):
     response = json.loads(entry['message'])['message']
     return response
 
+def countdown(c):
+    while c:
+        m, s = divmod(c, 60)
+        timer = '{:02d}:{:02d}'.format(m, s)
+        print(timer, end="\r")
+        time.sleep(1)
+        c -= 1
+    print('Fire in the hole!!')
 def _login_bank():
     driver = webdriver.Chrome(options=opts, service=Service(ChromeDriverManager().install()))
     driver.get(
         'https://identity-tcb.techcombank.com.vn/auth/realms/backbase/protocol/openid-connect/auth?response_type=code&client_id=tcb-web-client&state=V0hFfm55d3RUQ3NRcmlqaGFnUWVwRjR4RTIzckpuVnVEMWFZcF8xNXkwTEt4&redirect_uri=https%3A%2F%2Fonlinebanking.techcombank.com.vn%2Fredirect&scope=openid&code_challenge=8qW97nK9Hh8nJ-ryzRH17WiYZ4RvOapCoe3t_TEacgc&code_challenge_method=S256&nonce=V0hFfm55d3RUQ3NRcmlqaGFnUWVwRjR4RTIzckpuVnVEMWFZcF8xNXkwTEt4&ui_locales=en-US')
     isRun = True;
+    count = 0;
     while True:
+        if(count >= 4):
+            break
+        count = count+1
         try:
             if isRun is True:
                 eUname = driver.find_element(by=By.CSS_SELECTOR, value="#username")
@@ -71,7 +84,7 @@ def _login_bank():
                 _get_token(driver)
                 break
         except Exception as e:
-            if (driver.current_url.__contains__('https://onlinebanking.techcombank.com.vn/dashboard')):
+            if driver.current_url.__contains__('https://onlinebanking.techcombank.com.vn/dashboard'):
                 isRun = False;
 def _get_token(driver):
     logs = driver.get_log('performance')
@@ -131,9 +144,14 @@ def _history():
     except requests.exceptions.RequestException as e:
         print(str(e))
 
-if __name__ == '__main__':
-    _history()
-schedule.every(2).hours.do(_history)
+def _run_pending():
+    val = date.today().weekday()
+    if val < 5:
+        _history()
+
+# if __name__ == '__main__':
+#     _history()
+schedule.every(10).seconds.do(_run_pending)
 while True:
     schedule.run_pending()
     time.sleep(1)
