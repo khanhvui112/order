@@ -151,7 +151,7 @@ def _run_pending():
 
 # if __name__ == '__main__':
 #     _history()
-schedule.every(10).seconds.do(_run_pending)
+schedule.every(20).minutes.do(_run_pending)
 while True:
     schedule.run_pending()
     time.sleep(1)
